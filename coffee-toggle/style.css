@@ -1,0 +1,179 @@
+/* Base Layout */
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* Ek smooth premium gradient background jo glass effect ko ubhar ke dikhaye */
+    background: linear-gradient(135deg, #e6ccb2 0%, #b79a81 100%);
+    transition: background 0.5s ease;
+}
+
+/* Agar dark theme use kar rahe ho to uske liye bhi premium gradient */
+body.dark-theme {
+    background: linear-gradient(135deg, #23120b 0%, #3d2519 100%);
+}
+
+.toggle-input {
+    display: none;
+}
+
+/* Track (Outer Capsule) - Pure Glassmorphism Look */
+.toggle-label {
+    position: relative;
+    display: block;
+    width: 130px; /* Thoda sa size badhaya premium feel ke liye */
+    height: 65px;
+    
+    /* Glass Effect Basics */
+    background: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Background elements ko blur karega */
+    -webkit-backdrop-filter: blur(10px);
+    
+    border-radius: 50px;
+    cursor: pointer;
+    
+    /* Glass Borders: Light reflection jaisa realistic border effect */
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    
+    /* Soft shadows */
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.05),
+                0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    transition: background-color 0.5s ease, border 0.5s ease;
+}
+
+/* The Switcher: Default state me premium gloss roasted bean */
+.toggle-button {
+    position: absolute;
+    top: 6.5px;
+    left: 15px;
+    width: 30px;  
+    height: 50px; 
+    background-color: #5c3a21; /* Glossy dark chocolate brown */
+    border-radius: 46% 40% 43% 45% / 40% 35% 65% 60%;
+    
+    /* Dual shadow: Soft glow + drop shadow */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 
+                inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    border: 0px solid transparent;
+    overflow: hidden; 
+    
+    transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.265, 1.55), 
+                background-color 0.4s ease, 
+                border-radius 0.4s ease,
+                width 0.4s ease,
+                height 0.4s ease,
+                top 0.4s ease,
+                left 0.4s ease,
+                border 0.3s ease;
+}
+
+/* Bean Seam Line */
+.bean-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 70%;
+    background-color: #2b1a0f;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) rotate(4deg);
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+/* Coffee Filling Layer (Inside the cup) */
+.toggle-button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #8b5a2b; /* Premium rich liquid color */
+    transform: translateY(100%); 
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s; 
+}
+
+/* Cup Handle - Glass match white rim */
+.cup-handle {
+    position: absolute;
+    right: -12px;
+    width: 11px;
+    height: 20px;
+    border: 4px solid #ffffff;
+    border-left: none;
+    border-radius: 0 14px 14px 0;
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: left center;
+    box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease 0.4s, transform 0.4s ease 0.4s;
+}
+
+/* Steam Layers */
+.steam-container {
+    position: absolute;
+    top: -18px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.4s ease 1s; 
+}
+.steam {
+    width: 2px;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.65); /* Soft white glass steam */
+    border-radius: 3px;
+    backdrop-filter: blur(2px);
+}
+
+/* --- ACTIVE STATE (Glass Cup filled with Coffee) --- */
+
+.toggle-input:checked + .toggle-label .toggle-button {
+    transform: translateX(53px) rotate(360deg);
+    top: 6.5px;
+    width: 50px;  
+    height: 50px; 
+    background-color: rgba(255, 255, 255, 0.9); /* Premium milky white ceramic cup look */
+    border: 4px solid #ffffff; 
+    border-radius: 50%; 
+    overflow: visible; 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Coffee Liquid fill trigger */
+.toggle-input:checked + .toggle-label .toggle-button::after {
+    transform: translateY(0); 
+    border-radius: 50%;
+}
+
+.toggle-input:checked + .toggle-label .bean-line {
+    opacity: 0;
+}
+
+.toggle-input:checked + .toggle-label .cup-handle {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 5;
+}
+
+/* Steam Animation setup */
+.toggle-input:checked + .toggle-label .steam-container {
+    opacity: 1;
+}
+.toggle-input:checked + .toggle-label .s1 { animation: steamRise 1.6s infinite ease-in-out 1s; }
+.toggle-input:checked + .toggle-label .s2 { animation: steamRise 1.6s infinite ease-in-out 1.3s; }
+.toggle-input:checked + .toggle-label .s3 { animation: steamRise 1.6s infinite ease-in-out 1.6s; }
+
+@keyframes steamRise {
+    0% { transform: translateY(0) scaleY(0.6); opacity: 0; }
+    50% { opacity: 0.7; transform: translateY(-7px) scaleY(1.2); }
+    100% { transform: translateY(-16px) scaleY(0.4); opacity: 0; }
+}
